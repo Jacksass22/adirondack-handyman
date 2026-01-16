@@ -11,7 +11,7 @@ interface Message {
 
 export function ChatWidget() {
   // Configuration - Update this URL with your n8n webhook
-  const webhookUrl = process.env.NEXT_PUBLIC_CHAT_WEBHOOK_URL || "";
+  const webhookUrl = process.env.NEXT_PUBLIC_CHAT_WEBHOOK_URL || "https://internal.defiantintegration.com/webhook/adirondack-chat";
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

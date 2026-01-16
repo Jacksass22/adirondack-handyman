@@ -99,8 +99,8 @@ export function ChatWidget() {
 
       const data = await response.json();
 
-      if (data.success && data.response) {
-        const assistantMessage: Message = { role: "assistant", content: data.response };
+      if (data.success && (data.response || data.message)) {
+        const assistantMessage: Message = { role: "assistant", content: data.response || data.message };
         const updatedMessages = [...newMessages, assistantMessage];
         setMessages(updatedMessages);
         saveHistory(updatedMessages);

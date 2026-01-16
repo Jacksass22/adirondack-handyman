@@ -196,17 +196,6 @@ export default function ServicesPage() {
                         transition={{ duration: 0.3 }}
                       >
                         <div className="px-6 pb-6">
-                          {/* What to expect */}
-                          <div className="bg-amber/10 rounded-xl p-4 mb-6">
-                            <h3 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
-                              <CheckCircle2 className="w-5 h-5 text-amber" />
-                              What to expect
-                            </h3>
-                            <p className="text-charcoal-light text-sm">
-                              {service.whatToExpect}
-                            </p>
-                          </div>
-
                           {/* Jobs list */}
                           <div className="grid sm:grid-cols-2 gap-3 mb-6">
                             {service.jobs.map((job) => (

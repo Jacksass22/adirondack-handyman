@@ -68,63 +68,37 @@ export default function AboutPage() {
     <div className="pt-20">
       {/* Hero */}
       <section className="bg-dark-lighter py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Photo */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="order-2 lg:order-1"
-            >
-              <div className="aspect-[4/5] bg-dark rounded-2xl overflow-hidden max-w-md mx-auto lg:mx-0 border border-dark-border relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-24 h-24 bg-forest/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-12 h-12 text-forest" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-light text-sm">
-                      Photo placeholder
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
 
-            {/* Content */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="order-1 lg:order-2"
-            >
+            <h1 className="font-[family-name:var(--font-outfit)] text-4xl md:text-5xl font-bold text-charcoal mb-6">
+              About Adirondack Handyman
+            </h1>
+            <div className="space-y-4 text-charcoal-light text-lg leading-relaxed max-w-3xl mx-auto">
+              <p>
+                Adirondack Handyman provides reliable, professional home repair and improvement services for homeowners and businesses in the Amsterdam, NY area and beyond. We handle a wide range of projects, from deck building and painting to flooring, masonry, and more.
+              </p>
+              <p>
+                Our focus is on quality workmanship, clear communication, and honest pricing. Whether you need a small repair or a larger renovation, you can count on us to get the job done efficiently and with care.
+              </p>
+            </div>
 
-              <h1 className="font-[family-name:var(--font-outfit)] text-4xl md:text-5xl font-bold text-charcoal mb-6">
-                About Adirondack Handyman
-              </h1>
-              <div className="space-y-4 text-charcoal-light text-lg leading-relaxed">
-                <p>
-                  Adirondack Handyman provides reliable, professional home repair and improvement services for homeowners and businesses in the Amsterdam, NY area and beyond. We handle a wide range of projects, from deck building and painting to flooring, masonry, and more.
-                </p>
-                <p>
-                  Our focus is on quality workmanship, clear communication, and honest pricing. Whether you need a small repair or a larger renovation, you can count on us to get the job done efficiently and with care.
-                </p>
+            <div className="mt-8 flex flex-wrap gap-4 justify-center">
+              <div className="flex items-center gap-2 bg-dark px-4 py-2 rounded-full border border-dark-border">
+                <Shield className="w-5 h-5 text-forest" />
+                <span className="font-medium text-charcoal">Licensed & Insured</span>
               </div>
-
-              <div className="mt-8 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-dark px-4 py-2 rounded-full border border-dark-border">
-                  <Shield className="w-5 h-5 text-forest" />
-                  <span className="font-medium text-charcoal">Licensed & Insured</span>
-                </div>
-                <div className="flex items-center gap-2 bg-dark px-4 py-2 rounded-full border border-dark-border">
-                  <MapPin className="w-5 h-5 text-forest" />
-                  <span className="font-medium text-charcoal">Amsterdam, NY</span>
-                </div>
+              <div className="flex items-center gap-2 bg-dark px-4 py-2 rounded-full border border-dark-border">
+                <MapPin className="w-5 h-5 text-forest" />
+                <span className="font-medium text-charcoal">Amsterdam, NY</span>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

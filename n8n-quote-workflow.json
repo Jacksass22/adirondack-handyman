@@ -1,0 +1,92 @@
+{
+  "name": "Adirondack Handyman - Quote Form",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adirondack-quote",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-quote",
+      "name": "Webhook - Quote Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300],
+      "webhookId": "adirondack-quote"
+    },
+    {
+      "parameters": {
+        "fromEmail": "jackson@defiantintegration.com",
+        "toEmail": "Owenmormile@gmail.com",
+        "subject": "=🔨 New Quote Request: {{ $json.body.name }} - {{ $json.body.service }}",
+        "emailFormat": "html",
+        "html": "=<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <div style=\"background: #2c5530; color: white; padding: 20px; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"margin: 0; font-size: 24px;\">🔨 New Quote Request</h1>\n    <p style=\"margin: 5px 0 0 0; opacity: 0.9;\">Adirondack Handyman Website</p>\n  </div>\n  \n  <div style=\"padding: 30px; background: #f9f9f9;\">\n    <h2 style=\"color: #2c5530; margin-top: 0; border-bottom: 2px solid #2c5530; padding-bottom: 10px;\">Contact Information</h2>\n    <table style=\"width: 100%; border-collapse: collapse;\">\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Name:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.name }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Phone:</td>\n        <td style=\"padding: 8px 0;\"><a href=\"tel:{{ $json.body.phone }}\" style=\"color: #2c5530; text-decoration: none;\">{{ $json.body.phone }}</a></td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Email:</td>\n        <td style=\"padding: 8px 0;\"><a href=\"mailto:{{ $json.body.email }}\" style=\"color: #2c5530; text-decoration: none;\">{{ $json.body.email }}</a></td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Address:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.address }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Best Time:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.bestTime || 'Not specified' }}</td>\n      </tr>\n    </table>\n\n    <h2 style=\"color: #2c5530; margin-top: 30px; border-bottom: 2px solid #2c5530; padding-bottom: 10px;\">Project Details</h2>\n    <table style=\"width: 100%; border-collapse: collapse;\">\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Service:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.service }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530; vertical-align: top;\">Description:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.description || 'Not provided' }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Urgency:</td>\n        <td style=\"padding: 8px 0;\">\n          {{#if ($json.body.urgency === 'emergency') }}\n            <span style=\"background: #dc3545; color: white; padding: 4px 12px; border-radius: 4px; font-weight: bold;\">🔥 EMERGENCY</span>\n          {{else if ($json.body.urgency === 'this-week') }}\n            <span style=\"background: #ffc107; color: #000; padding: 4px 12px; border-radius: 4px; font-weight: bold;\">📅 This Week</span>\n          {{else}}\n            <span style=\"background: #28a745; color: white; padding: 4px 12px; border-radius: 4px;\">✅ Flexible</span>\n          {{/if}}\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530;\">Contact Method:</td>\n        <td style=\"padding: 8px 0;\">{{ $json.body.contactMethod }}</td>\n      </tr>\n      {{#if $json.body.files.length }}\n      <tr>\n        <td style=\"padding: 8px 0; font-weight: bold; color: #2c5530; vertical-align: top;\">Files:</td>\n        <td style=\"padding: 8px 0;\">\n          {{#each $json.body.files }}\n            <div>📎 {{ this }}</div>\n          {{/each}}\n        </td>\n      </tr>\n      {{/if}}\n    </table>\n  </div>\n  \n  <div style=\"padding: 20px; background: #e8f4e8; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"margin: 0; color: #2c5530; font-size: 14px;\">📅 Submitted: {{ $json.body.submittedAt }}</p>\n    <p style=\"margin: 10px 0 0 0; color: #666; font-size: 12px;\">Via adirondackhandyman.com</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "id": "email-owen",
+      "name": "Email Owen",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [480, 300],
+      "credentials": {
+        "smtp": {
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"message\": \"Quote request received\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Website",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Quote Form": {
+      "main": [
+        [
+          {
+            "node": "Email Owen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Owen": {
+      "main": [
+        [
+          {
+            "node": "Respond to Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

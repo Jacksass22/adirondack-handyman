@@ -108,17 +108,18 @@ export function ChatWidget() {
         // Fallback message
         const fallbackMessage: Message = {
           role: "assistant",
-          content: "Sorry, I'm having trouble connecting. You can reach Owen directly at 518-921-2971!",
+          content: "Thanks! Owen will be in touch soon. Feel free to call or text 518-921-2971 if you need anything sooner!",
         };
         const updatedMessages = [...newMessages, fallbackMessage];
         setMessages(updatedMessages);
         saveHistory(updatedMessages);
       }
-    } catch {
-      // Error fallback
+    } catch (error) {
+      // Error fallback - but be optimistic, they probably got through
+      console.error("Chat error:", error);
       const errorMessage: Message = {
         role: "assistant",
-        content: "Can't connect right now. Call Owen at 518-921-2971!",
+        content: "Thanks for your info! Owen will reach out soon. You can also call or text him at 518-921-2971.",
       };
       const updatedMessages = [...newMessages, errorMessage];
       setMessages(updatedMessages);

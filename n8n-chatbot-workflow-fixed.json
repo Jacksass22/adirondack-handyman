@@ -1,0 +1,207 @@
+{
+  "name": "Adirondack Handyman Chatbot - FIXED",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adirondack-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "You are the friendly AI assistant for Adirondack Handyman.\n\n## BUSINESS INFO\n- Business: Adirondack Handyman\n- Owner: Owen\n- Phone/Text: 518-921-2971\n- 20+ years experience\n- Fully insured\n- Service Area: Adirondack / Upstate NY\n\n## SERVICES\n- General repairs & maintenance\n- Carpentry & woodwork\n- Decks & porches\n- Doors & windows\n- Drywall & painting\n- Flooring\n- Kitchen & bath updates\n- Pressure washing\n- Seasonal maintenance\n- And more\n\n## YOUR JOB\nHave a natural conversation and collect lead info over MULTIPLE messages.\n\n## LEAD FIELDS TO COLLECT (all 4 required)\n1. Name\n2. Best contact method (phone OR email)\n3. Project details (what they need done)\n4. Town / nearest town\n\n## RULES\n- Be friendly and conversational\n- Ask ONE question at a time\n- Answer service questions, then continue collecting missing fields\n- If unsure, tell them to call/text Owen at 518-921-2971\n- Do NOT output [LEAD_CAPTURED] until you have ALL 4 fields\n- When complete, thank them and say Owen will reach out soon\n\n## WHEN YOU HAVE ALL 4 FIELDS, OUTPUT THIS AT THE END:\n\n[LEAD_CAPTURED]\nName: {name}\nContact: {contact}\nProject: {project}\nTown: {town}\n[/LEAD_CAPTURED]"
+        }
+      },
+      "id": "ai-agent",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [360, 480],
+      "credentials": {
+        "deepSeekApi": {
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.session_id || 'default' }}"
+      },
+      "id": "memory",
+      "name": "Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [520, 480]
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $json.output || $json.text || '';\n\n// Check for lead capture block\nconst leadMatch = output.match(/\\[LEAD_CAPTURED\\]([\\s\\S]*?)\\[\\/LEAD_CAPTURED\\]/);\n\nlet leadCaptured = false;\nlet leadData = null;\nlet cleanResponse = output.replace(/\\[LEAD_CAPTURED\\][\\s\\S]*?\\[\\/LEAD_CAPTURED\\]/, '').trim();\n\nif (leadMatch) {\n  leadCaptured = true;\n  const block = leadMatch[1];\n  leadData = {\n    name: (block.match(/Name:\\s*(.+)/i) || [])[1]?.trim() || '',\n    contact: (block.match(/Contact:\\s*(.+)/i) || [])[1]?.trim() || '',\n    project: (block.match(/Project:\\s*(.+)/i) || [])[1]?.trim() || '',\n    town: (block.match(/Town:\\s*(.+)/i) || [])[1]?.trim() || ''\n  };\n}\n\nreturn {\n  response: cleanResponse,\n  leadCaptured,\n  leadData,\n  webhookData: $('Webhook').first().json.body\n};"
+      },
+      "id": "parse-lead",
+      "name": "Parse Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": {{ JSON.stringify($json.response) }},\n  \"lead_captured\": {{ $json.leadCaptured }}\n}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-immediately",
+      "name": "Respond FIRST",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [920, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.leadCaptured }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-lead",
+      "name": "Lead Captured?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [920, 480]
+    },
+    {
+      "parameters": {
+        "fromEmail": "jackson@defiantintegration.com",
+        "toEmail": "Owenmormile@gmail.com",
+        "subject": "=🔨 New Lead: {{ $json.leadData.name }} - {{ $json.leadData.town }}",
+        "emailFormat": "html",
+        "html": "=<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <div style=\"background: #2c5530; color: white; padding: 20px; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"margin: 0;\">🔨 New Chatbot Lead</h1>\n  </div>\n  \n  <div style=\"padding: 20px; background: #f9f9f9;\">\n    <h2 style=\"color: #2c5530;\">Contact Info</h2>\n    <p><strong>Name:</strong> {{ $json.leadData.name }}</p>\n    <p><strong>Contact:</strong> {{ $json.leadData.contact }}</p>\n    <p><strong>Town:</strong> {{ $json.leadData.town }}</p>\n    \n    <h2 style=\"color: #2c5530;\">Project</h2>\n    <p>{{ $json.leadData.project }}</p>\n  </div>\n  \n  <div style=\"padding: 15px; background: #e8f4e8; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"margin: 0; font-size: 12px;\">Lead captured via website chatbot</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "id": "email-owen",
+      "name": "Email Owen (Async)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1140, 400],
+      "credentials": {
+        "smtp": {
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead": {
+      "main": [
+        [
+          {
+            "node": "Respond FIRST",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lead Captured?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Captured?": {
+      "main": [
+        [
+          {
+            "node": "Email Owen (Async)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

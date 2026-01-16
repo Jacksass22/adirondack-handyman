@@ -111,6 +111,24 @@ function QuoteFormContent() {
     setUploadedFiles(files => files.filter((_, i) => i !== index));
   };
 
+  // Convert file to base64
+  const fileToBase64 = (file: File): Promise<{name: string, type: string, size: number, data: string}> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        resolve({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          data: base64
+        });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
 
@@ -124,10 +142,26 @@ function QuoteFormContent() {
         return;
       }
 
-      // Prepare form data with file names (actual file upload would need additional handling)
+      // Process files to base64
+      const processedFiles = [];
+      for (const file of uploadedFiles) {
+        // Skip files over 5MB to avoid timeout issues
+        if (file.size > 5 * 1024 * 1024) {
+          console.warn(`Skipping ${file.name} - too large (${(file.size / 1024 / 1024).toFixed(1)}MB)`);
+          continue;
+        }
+        try {
+          const base64File = await fileToBase64(file);
+          processedFiles.push(base64File);
+        } catch (err) {
+          console.error(`Failed to process ${file.name}:`, err);
+        }
+      }
+
+      // Prepare form data with base64 encoded files
       const payload = {
         ...data,
-        files: uploadedFiles.map(f => f.name),
+        files: processedFiles,
         submittedAt: new Date().toISOString(),
       };
 

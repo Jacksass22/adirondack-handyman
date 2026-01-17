@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import RotatingText from "@/components/ui/RotatingText";
 import { BeforeAfterShowcase } from "@/components/ui/BeforeAfterShowcase";
+import ShinyText from "@/components/ui/ShinyText";
 
 const showcaseProjects = [
   {
@@ -63,7 +64,16 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="font-[family-name:var(--font-outfit)] text-4xl sm:text-5xl md:text-6xl font-bold text-charcoal leading-tight mb-6"
             >
-              <span className="text-forest">Professional</span>
+              <ShinyText
+                text="Professional"
+                speed={3}
+                color="#FFFFFF"
+                shineColor="#A0A0A0"
+                spread={120}
+                direction="left"
+                delay={1}
+                className="text-forest"
+              />
               <br />
               <RotatingText
                 texts={["Home Repairs", "Deck Building", "Siding & Gutters", "Flooring", "Excavation", "Paint & Stain", "Bathroom Remodels", "Roof Repairs", "Windows & Doors"]}

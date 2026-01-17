@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Wrench } from "lucide-react";
+import { Menu, X, Phone, Wrench, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 const navLinks = [
@@ -54,6 +54,15 @@ export function Header() {
             >
               <Phone className="w-4 h-4" />
               <span className="font-medium">(518) 921-2971</span>
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=100063972312088"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-charcoal hover:text-forest transition-colors"
+              aria-label="Follow us on Facebook"
+            >
+              <Facebook className="w-5 h-5" />
             </a>
             <Button href="/quote" variant="primary">
               Get a Quote

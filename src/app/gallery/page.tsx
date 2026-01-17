@@ -49,6 +49,83 @@ const projects = [
     description: "Installed new luxury vinyl plank flooring. Durable, waterproof, and looks like real hardwood. Perfect for high-traffic areas.",
     image: "/gallery/project-7.jpg",
   },
+  {
+    id: 8,
+    title: "Basement Framing & Renovation",
+    category: "interior",
+    description: "Complete basement framing with new walls and ceiling. Transforming unfinished space into usable living area.",
+    image: "/gallery/project-8.jpg",
+  },
+  {
+    id: 9,
+    title: "Basement Flooring Installation",
+    category: "interior",
+    description: "High-quality vinyl plank flooring installation in basement renovation. Clean, professional finish.",
+    image: "/gallery/project-9.jpg",
+  },
+  {
+    id: 10,
+    title: "Basement Floor Complete",
+    category: "interior",
+    description: "Wide view of completed basement flooring. Durable, waterproof flooring that looks great.",
+    image: "/gallery/project-10.jpg",
+  },
+  {
+    id: 11,
+    title: "Custom Deck with Privacy Wall",
+    category: "exterior",
+    description: "Beautiful deck construction with built-in privacy wall and professional railings.",
+    image: "/gallery/project-11.jpg",
+  },
+  {
+    id: 12,
+    title: "Complete Deck Build",
+    category: "exterior",
+    description: "Full view of custom deck project with quality craftsmanship throughout.",
+    image: "/gallery/project-12.jpg",
+  },
+  {
+    id: 13,
+    title: "Roof & Tree Service",
+    category: "exterior",
+    description: "Professional tree work and roof services using proper equipment for safe, quality results.",
+    image: "/gallery/project-13.jpg",
+  },
+  {
+    id: 14,
+    title: "Foundation Drainage & Stone Work",
+    category: "exterior",
+    description: "Proper drainage installation with decorative stone veneer on foundation. Protects your home while looking great.",
+    image: "/gallery/project-14.jpg",
+  },
+  {
+    id: 15,
+    title: "Bathroom Tile Work - In Progress",
+    category: "interior",
+    description: "Custom tile installation for shower. Precision work that's both beautiful and watertight.",
+    image: "/gallery/project-15.jpg",
+  },
+  {
+    id: 16,
+    title: "Bathroom Tile - Completed",
+    category: "interior",
+    description: "Finished bathroom tile work with modern design and professional installation.",
+    image: "/gallery/project-16.jpg",
+  },
+  {
+    id: 17,
+    title: "Deck with Hot Tub Installation",
+    category: "exterior",
+    description: "Custom deck designed and built to accommodate hot tub with sturdy construction and clean finish.",
+    image: "/gallery/project-17.jpg",
+  },
+  {
+    id: 18,
+    title: "Covered Deck with Stairs",
+    category: "exterior",
+    description: "Beautiful covered deck with quality railings and stairs. Perfect outdoor living space.",
+    image: "/gallery/project-18.jpg",
+  },
 ];
 
 const categories = [
@@ -199,26 +276,6 @@ export default function GalleryPage() {
         )}
       </AnimatePresence>
 
-      {/* CTA */}
-      <section className="py-16 md:py-24 bg-forest">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-[family-name:var(--font-outfit)] text-3xl md:text-4xl font-bold text-cream mb-6">
-              Ready to be my next success story?
-            </h2>
-            <p className="text-cream/80 text-lg mb-8">
-              Let's turn your project into another happy customer story.
-            </p>
-            <Button href="/quote" variant="secondary" size="lg">
-              Start Your Project
-            </Button>
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 }

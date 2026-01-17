@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-const projects = [
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image?: string;
+  before?: string;
+  after?: string;
+  isBeforeAfter?: boolean;
+}
+
+const projects: Project[] = [
   {
     id: 1,
     title: "Chimney Rebuild & Repair",
@@ -33,7 +44,9 @@ const projects = [
     title: "Roof Repair & Sheathing",
     category: "exterior",
     description: "Replaced damaged roof sheathing with new plywood. Catching these problems early saves you from much bigger headaches down the road.",
-    image: "/gallery/project-5.jpg",
+    before: "/gallery/project-5-before.jpg",
+    after: "/gallery/project-5-after.jpg",
+    isBeforeAfter: true,
   },
   {
     id: 6,
@@ -113,13 +126,6 @@ const projects = [
     image: "/gallery/project-16.jpg",
   },
   {
-    id: 17,
-    title: "Deck with Hot Tub Installation",
-    category: "exterior",
-    description: "Custom deck designed and built to accommodate hot tub with sturdy construction and clean finish.",
-    image: "/gallery/project-17.jpg",
-  },
-  {
     id: 18,
     title: "Covered Deck with Stairs",
     category: "exterior",
@@ -135,9 +141,135 @@ const categories = [
   { id: "assembly", label: "Assembly" },
 ];
 
+// Component for modal before/after images
+function ModalBeforeAfterImage({ project }: { project: Project }) {
+  const [showBefore, setShowBefore] = useState(true);
+
+  useEffect(() => {
+    if (!project.isBeforeAfter) return;
+
+    const interval = setInterval(() => {
+      setShowBefore(prev => !prev);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [project.isBeforeAfter]);
+
+  if (!project.isBeforeAfter || !project.before || !project.after) {
+    return (
+      <Image
+        src={project.image || ""}
+        alt={project.title}
+        fill
+        className="object-cover rounded-3xl"
+        sizes="(max-width: 768px) 100vw, 896px"
+      />
+    );
+  }
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={showBefore ? "before" : "after"}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={showBefore ? project.before : project.after}
+            alt={`${project.title} - ${showBefore ? "Before" : "After"}`}
+            fill
+            className="object-cover rounded-3xl"
+            sizes="(max-width: 768px) 100vw, 896px"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Before/After Badge */}
+      <div className="absolute top-6 left-6 z-10">
+        <motion.div
+          key={showBefore ? "before-badge" : "after-badge"}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="px-4 py-2 bg-charcoal/90 text-cream text-sm font-semibold rounded-full"
+        >
+          {showBefore ? "BEFORE" : "AFTER"}
+        </motion.div>
+      </div>
+    </>
+  );
+}
+
+// Component for rotating before/after images
+function BeforeAfterImage({ project }: { project: Project }) {
+  const [showBefore, setShowBefore] = useState(true);
+
+  useEffect(() => {
+    if (!project.isBeforeAfter) return;
+
+    const interval = setInterval(() => {
+      setShowBefore(prev => !prev);
+    }, 3000); // Rotate every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [project.isBeforeAfter]);
+
+  if (!project.isBeforeAfter || !project.before || !project.after) {
+    return (
+      <Image
+        src={project.image || ""}
+        alt={project.title}
+        fill
+        className="object-cover group-hover:scale-105 transition-transform duration-300"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
+    );
+  }
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={showBefore ? "before" : "after"}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={showBefore ? project.before : project.after}
+            alt={`${project.title} - ${showBefore ? "Before" : "After"}`}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Before/After Badge */}
+      <div className="absolute top-3 left-3 z-10">
+        <motion.div
+          key={showBefore ? "before-badge" : "after-badge"}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="px-3 py-1 bg-charcoal/90 text-cream text-xs font-semibold rounded-full"
+        >
+          {showBefore ? "BEFORE" : "AFTER"}
+        </motion.div>
+      </div>
+    </>
+  );
+}
+
 export default function GalleryPage() {
   const [filter, setFilter] = useState("all");
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = filter === "all"
     ? projects
@@ -201,13 +333,7 @@ export default function GalleryPage() {
                   <div className="rounded-2xl shadow-lg shadow-black/20 overflow-hidden hover:shadow-xl transition-shadow">
                     {/* Project Image */}
                     <div className="aspect-[4/3] relative overflow-hidden">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
+                      <BeforeAfterImage project={project} />
                     </div>
                   </div>
                 </motion.div>
@@ -237,13 +363,7 @@ export default function GalleryPage() {
             >
               {/* Image */}
               <div className="aspect-[4/3] relative">
-                <Image
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  fill
-                  className="object-cover rounded-3xl"
-                  sizes="(max-width: 768px) 100vw, 896px"
-                />
+                <ModalBeforeAfterImage project={selectedProject} />
 
                 {/* Close button */}
                 <button

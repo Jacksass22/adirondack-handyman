@@ -1,5 +1,19 @@
 import Link from "next/link";
-import { Wrench, Phone, Mail, MapPin, Facebook } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
+
+// Facebook icon component (using simple SVG since lucide Facebook is deprecated)
+const FacebookIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
 
 const serviceLinks = [
   { href: "/services#interior", label: "Interior Work" },
@@ -26,14 +40,11 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-amber rounded-lg flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-forest" />
-              </div>
               <div>
                 <span className="font-[family-name:var(--font-outfit)] font-bold text-cream text-lg">
                   Adirondack
                 </span>
-                <span className="font-[family-name:var(--font-outfit)] font-medium text-amber text-lg ml-1">
+                <span className="font-[family-name:var(--font-outfit)] font-medium text-cream text-lg ml-1">
                   Handyman
                 </span>
               </div>
@@ -45,14 +56,14 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <a
                 href="tel:+15189212971"
-                className="flex items-center gap-2 text-cream/80 hover:text-amber transition-colors"
+                className="flex items-center gap-2 text-cream/80 hover:text-cream transition-colors"
               >
                 <Phone className="w-4 h-4" />
                 <span>(518) 921-2971</span>
               </a>
               <a
                 href="mailto:owenmormile@gmail.com"
-                className="flex items-center gap-2 text-cream/80 hover:text-amber transition-colors"
+                className="flex items-center gap-2 text-cream/80 hover:text-cream transition-colors"
               >
                 <Mail className="w-4 h-4" />
                 <span>owenmormile@gmail.com</span>
@@ -66,7 +77,7 @@ export function Footer() {
 
           {/* Services Column */}
           <div>
-            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-amber mb-4">
+            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-cream mb-4">
               Services
             </h3>
             <ul className="space-y-2">
@@ -74,7 +85,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-cream/80 hover:text-amber transition-colors text-sm"
+                    className="text-cream/80 hover:text-cream transition-colors text-sm"
                   >
                     {link.label}
                   </Link>
@@ -85,7 +96,7 @@ export function Footer() {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-amber mb-4">
+            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-cream mb-4">
               Company
             </h3>
             <ul className="space-y-2">
@@ -93,7 +104,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-cream/80 hover:text-amber transition-colors text-sm"
+                    className="text-cream/80 hover:text-cream transition-colors text-sm"
                   >
                     {link.label}
                   </Link>
@@ -104,7 +115,7 @@ export function Footer() {
 
           {/* Connect Column */}
           <div>
-            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-amber mb-4">
+            <h3 className="font-[family-name:var(--font-outfit)] font-semibold text-cream mb-4">
               Connect
             </h3>
             <ul className="space-y-2">
@@ -113,9 +124,9 @@ export function Footer() {
                   href="https://www.facebook.com/profile.php?id=100063972312088"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-cream/80 hover:text-amber transition-colors text-sm"
+                  className="flex items-center gap-2 text-cream/80 hover:text-cream transition-colors text-sm"
                 >
-                  <Facebook className="w-4 h-4" />
+                  <FacebookIcon className="w-4 h-4" />
                   Follow on Facebook
                 </a>
               </li>
@@ -136,7 +147,7 @@ export function Footer() {
                 href="https://defiantintegration.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-cream/60 hover:text-amber transition-colors text-sm"
+                className="text-cream/60 hover:text-cream transition-colors text-sm"
               >
                 Web Design by Defiant Integration
               </a>

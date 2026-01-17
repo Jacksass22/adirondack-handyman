@@ -179,17 +179,27 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-24 sm:right-5 sm:w-[380px] h-[calc(100vh-80px)] sm:h-[520px] sm:max-h-[calc(100vh-120px)] bg-dark-lighter rounded-2xl shadow-2xl shadow-black/30 z-50 flex flex-col overflow-hidden border border-dark-border"
+            className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-24 sm:right-5 sm:w-[380px] h-[500px] sm:h-[520px] sm:max-h-[calc(100vh-120px)] bg-dark-lighter rounded-2xl shadow-2xl shadow-black/30 z-50 flex flex-col overflow-hidden border border-dark-border"
           >
             {/* Header */}
-            <div className="bg-forest px-5 py-4 flex items-center gap-3">
-              <div className="w-11 h-11 bg-amber rounded-full flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-forest" />
+            <div className="bg-forest px-4 py-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-cream rounded-full flex items-center justify-center">
+                  <Wrench className="w-5 h-5 text-forest" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-cream text-base">Adirondack Handyman</h3>
+                  <p className="text-cream/80 text-xs">Typically replies instantly</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-cream text-base">Adirondack Handyman</h3>
-                <p className="text-cream/80 text-xs">Typically replies instantly</p>
-              </div>
+              {/* Close button for mobile */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="sm:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-cream/10 transition-colors"
+                aria-label="Close chat"
+              >
+                <X className="w-5 h-5 text-cream" />
+              </button>
             </div>
 
             {/* Messages */}

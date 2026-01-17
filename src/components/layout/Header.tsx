@@ -23,9 +23,6 @@ export function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-forest rounded-lg flex items-center justify-center group-hover:bg-forest-dark transition-colors">
-              <Wrench className="w-5 h-5 text-amber" />
-            </div>
             <div>
               <span className="font-[family-name:var(--font-outfit)] font-bold text-forest text-sm sm:text-lg">
                 Adirondack
